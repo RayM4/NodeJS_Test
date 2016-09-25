@@ -34,7 +34,7 @@ app.get('/data', function(req, res, next) {
       return console.error('error fetching client', err);
 
     client.query('SELECT * FROM pokemon', function(err, result) {
-      next();
+      // next();
       if (err)
         return console.error('error with query', err)
       // console.log(result.rows);
@@ -43,7 +43,8 @@ app.get('/data', function(req, res, next) {
       res.render('formatted_table', {
         data: formatTableToHTML(result.rows)
       });
-      process.exit(0);
+      // process.exit(0);
+      // next();
     });
   });
 });
@@ -59,10 +60,10 @@ app.set('views', path.join(__dirname, 'views'));
 
 var formatTableToHTML = function(data) {
   var rowHeader = "<div class = 'row'>";
-  var colHeader = "<div class = 'col-sm-6>";
+  var colHeader = "<div class = 'col-sm-6'>";
   var divCloser = "</div>";
   var table = "";
-  for (i in data) {
+  for (var i in data) {
     table = table + rowHeader + colHeader + data[i].id;
     table = table + divCloser + colHeader + data[i].name;
     table = table + divCloser + divCloser;
