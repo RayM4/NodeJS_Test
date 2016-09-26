@@ -71,6 +71,7 @@ app.engine('.hbs', exphbs({
 app.set('view engine', '.hbs');
 app.set('views', path.join(__dirname, 'views'));
 
+
 //other functions
 var formatTableToHTML = function(data) {
   var rowHeader = "<div class = 'row'>";
@@ -85,32 +86,7 @@ var formatTableToHTML = function(data) {
   return table;
 };
 
-// //external api
-// const rp = require('request-promise');
-//
-// app.engine('.hbs', exphbs({
-//   defaultLayout: 'main',
-//   extname: '.hbs',
-//   layoutsDir: path.join(__dirname, 'views/layouts')
-// }));
-//
-// app.set('view engine', '.hbs');
-// app.set('views', path.join(__dirname, 'views'));
-//
-// app.get((req, res) => {
-//   rp({
-//     url: '',
-//     json:true
-//   })
-//   .then((data) => {
-//     // res.render(data);
-//     console.log(data);
-//   })
-//   .catch((err) => {
-//     console.log(err);
-//     res.render('error');
-//   })
-// });
+
 
 app.listen(port);
 
