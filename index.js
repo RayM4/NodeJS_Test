@@ -25,10 +25,10 @@ app.get('/data', function(req, res) {
     if (err)
       return console.error('error fetching client', err);
 
-    client.query('SELECT * FROM pokemon', function(err, result) {
+    client.query(conn.database.select_all, function(err, result) {
       if (err)
         return console.error('error with query', err)
-      // console.log(result.rows);
+      //console.log(result.rows);
       // res.json(result.rows);
 
       res.render('formatted_table', {
@@ -38,6 +38,42 @@ app.get('/data', function(req, res) {
   });
 });
 
+//joins?
+app.get('/stat/:dexID', function(req, res) {
+  pg.connect(conn.database.url, function(err, client) {
+    if (err)
+      return console.error('error fetching client', err);
+
+    var sql = conn.database.select_stat + req.params.dexID + ";";
+    console.log(sql);
+    client.query(sql, function(err, result) {
+      if (err)
+        return console.error('error with query', err);
+      console.log(result.rows);
+      res.render('table_stat', {
+        data: formatTableToHTML2(result.rows)
+      });
+    });
+  });
+});
+
+app.get('/ability/:dexID', function(req, res) {
+  pg.connect(conn.database.url, function(err, client) {
+    if (err)
+      return console.error('error fetching client', err);
+
+    var sql = conn.database.select_ability + req.params.dexID + ";";
+    console.log(sql);
+    client.query(sql, function(err, result) {
+      if (err)
+        return console.error('error with query', err);
+      console.log(result.rows);
+      res.render('table_ability', {
+        data: formatTableToHTML2(result.rows)
+      });
+    });
+  });
+});
 
 //testing callbacks
 var cb01 = function(req, res, next) {
@@ -81,7 +117,29 @@ var formatTableToHTML = function(data) {
   for (var i in data) {
     table = table + rowHeader + colHeader + data[i].id;
     table = table + divCloser + colHeader + data[i].name;
+
     table = table + divCloser + divCloser;
+  }
+  return table;
+};
+
+var formatTableToHTML2 = function(data) {
+  var rowHeader = "<div class = 'row'>";
+  var colHeaderTitle = "<div class = 'col-sm-2'>";
+  var divCloser = "</div>";
+  var table = "";
+  var keys = Object.keys(data[0]);
+  var rowSize = 8/(keys.length-2);
+  var colHeader = "<div class = 'col-sm-"+rowSize+"'>";
+  for (var i in data) {
+    table = table + rowHeader;
+    for (var j in keys) {
+      if (j < 2)
+        table = table + colHeaderTitle + data[i][keys[j]] + divCloser;
+      else
+        table = table + colHeader + data[i][keys[j]] + divCloser;
+    }
+    table = table + divCloser;
   }
   return table;
 };

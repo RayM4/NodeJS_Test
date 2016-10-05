@@ -1,9 +1,22 @@
 <style type="text/css">
-    .col-sm-6 {
+    [class*="col-sm-"]{
         border-style: double;
     }
+
     .header {
         font-weight: bold;
+    }
+
+    .row {
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: -ms-flexbox;
+        display: flex;
+        flex-wrap: wrap;
+    }
+    .row > [class*='col-'] {
+        display: flex;
+        flex-direction: column;
     }
 </style>
 <html>
